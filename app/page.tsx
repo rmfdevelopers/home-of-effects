@@ -8,20 +8,20 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { 
-  Palette, 
-  Package, 
-  Zap, 
-  Camera, 
-  Layers, 
-  MapPin, 
-  ArrowRight, 
-  CheckCheck, 
-  Loader2, 
-  Menu, 
-  X, 
-  Instagram, 
-  Phone, 
+import {
+  Palette,
+  Package,
+  Zap,
+  Camera,
+  Layers,
+  MapPin,
+  ArrowRight,
+  CheckCheck,
+  Loader2,
+  Menu,
+  X,
+  Instagram,
+  Phone,
   Mail,
   ImageOff,
   ExternalLink
@@ -49,7 +49,7 @@ const useScrollReveal = (threshold = 0.15) => {
 };
 
 // --- Components ---
-function SafeImage({ src, alt, fill, width, height, className, priority }: any) {
+function SafeImage({ src, alt, fill, width, height, className, priority, sizes }: any) {
   const [error, setError] = useState(false);
   if (error) {
     return (
@@ -59,15 +59,16 @@ function SafeImage({ src, alt, fill, width, height, className, priority }: any) 
     );
   }
   return (
-    <Image 
-      src={src} 
-      alt={alt} 
-      fill={fill} 
-      width={!fill ? (width ?? 800) : undefined} 
-      height={!fill ? (height ?? 600) : undefined} 
-      className={className} 
-      priority={priority} 
-      onError={() => setError(true)} 
+    <Image
+      src={src}
+      alt={alt}
+      fill={fill}
+      width={!fill ? (width ?? 800) : undefined}
+      height={!fill ? (height ?? 600) : undefined}
+      className={className}
+      priority={priority}
+      sizes={sizes || (fill ? "(max-width: 768px) 100vw, 50vw" : undefined)}
+      onError={() => setError(true)}
     />
   );
 }
@@ -103,15 +104,15 @@ export default function Page() {
   ];
 
   const features: Feature[] = [
-    { title: "Set Decoration", description: "Creative design for brands looking to build an immersive world around their products.", icon: "Palette" },
-    { title: "Prop Rentals", description: "Access to our curated vault of unique backdrops, textures, and bespoke items.", icon: "Package" },
-    { title: "Wholesale Portal", description: "Bulk decor deals and early access drops via our exclusive Telegram member link.", icon: "Zap" }
+    { title: "Studio Design", description: "Creative set design for brands and professional productions.", icon: "Palette" },
+    { title: "Prop Hire", description: "Access our curated vault of unique backdrops and textures.", icon: "Package" },
+    { title: "Bulk Deals", description: "Exclusive pricing and early access via our Telegram channel.", icon: "Zap" }
   ];
 
   const products: Product[] = [
-    { name: "Grand Roman Pillar Set", description: "Architectural Roman-style pillars for high-fashion photography and premium set builds.", price: "₦45,000", image_url: "https://images.unsplash.com/photo-1741115560123-8ac060c228f9" },
-    { name: "Iridescent Backdrop Panel", description: "A 10x10 light-reactive panel that shifts colors under studio flash, perfect for modern brand shoots.", price: "₦35,000", image_url: "https://images.unsplash.com/photo-1750277128108-9de704ae8225" },
-    { name: "Velvet Studio Chaise", description: "Custom-designed prop furniture in Deep Obsidian, built for editorial posing and comfort.", price: "₦65,000", image_url: "https://images.unsplash.com/photo-1698934641149-93431f3bd4f7" }
+    { name: "Grand Roman Pillar Set", description: "Architectural Roman-style pillars for high-fashion photography and premium set builds.", price: "₦45,000", image_url: "/props/pillars.png" },
+    { name: "Iridescent Backdrop Panel", description: "A 10x10 light-reactive panel that shifts colors under studio flash, perfect for modern brand shoots.", price: "₦35,000", image_url: "/props/backdrop.png" },
+    { name: "Velvet Studio Chaise", description: "Custom-designed prop furniture in Deep Obsidian, built for editorial posing and comfort.", price: "₦65,000", image_url: "/props/chaise.png" }
   ];
 
   const stats: Stat[] = [
@@ -153,9 +154,9 @@ export default function Page() {
 
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
+              <a
+                key={link.name}
+                href={link.href}
                 className={`text-sm font-semibold tracking-wide uppercase transition-colors hover:text-secondary ${link.highlight ? 'bg-secondary text-primary px-4 py-2 rounded-full hover:bg-white hover:text-primary' : 'text-white/70'}`}
                 {...(link.highlight ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
@@ -177,9 +178,9 @@ export default function Page() {
         </div>
         <nav className="flex flex-col items-center gap-10 mt-20 px-6 text-center">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href} 
+            <a
+              key={link.name}
+              href={link.href}
               onClick={() => setMobileMenuOpen(false)}
               className="text-3xl font-heading font-black text-white hover:text-secondary transition-colors"
             >
@@ -196,10 +197,10 @@ export default function Page() {
             <p className="text-secondary font-mono text-xs tracking-[0.4em] uppercase mb-8">
               Services & Prop Rentals
             </p>
-            <h1 className="font-heading text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+            <h1 className="font-heading text-4xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
               The Couture Studio for Brand Visionaries
             </h1>
-            <p className="text-white/40 mt-10 text-xl max-w-md leading-relaxed font-medium">
+            <p className="text-white/40 mt-10 text-lg md:text-xl max-w-md leading-relaxed font-medium">
               Transforming spaces. Defining styles. We don&apos;t just decorate; we help your business stand out in a crowded market.
             </p>
             <div className="mt-12 flex flex-wrap gap-6">
@@ -212,36 +213,27 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className={`relative min-h-[50vh] md:min-h-full overflow-hidden transition-all duration-1000 ease-out ${heroVisible ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`}>
-          <SafeImage 
-            src="https://images.unsplash.com/photo-1629686456827-71a2403d411c" 
-            alt="Home of Effects Hero" 
-            fill 
+        <div className={`relative hidden md:block transition-all duration-1000 delay-300 ${heroVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <SafeImage
+            src="/hero.png"
+            alt="Photography Studio"
+            fill
             className="object-cover scale-105"
-            priority 
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/10 to-transparent" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle,rgba(191,148,255,0.08)_0%,transparent_70%)] pointer-events-none" />
         </div>
       </section>
 
-      {/* D-RULE Divider */}
-      <div className="py-16 flex items-center gap-8 px-8 max-w-6xl mx-auto">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <span className="text-white/30 font-mono text-[10px] tracking-[0.5em] uppercase whitespace-nowrap">
-          Home of Effects &bull; Okota Showroom
-        </span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      </div>
-
       {/* Features: F-BENTO Pattern */}
       <section id="features" ref={featRef} className="py-28 px-6 bg-secondary/5">
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-20 transition-all duration-700 ${featVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h2 className="font-heading text-5xl md:text-7xl font-black text-white">Bespoke Services</h2>
-            <p className="text-white/40 mt-4 text-xl">Professional set solutions tailored for impact.</p>
+            <h2 className="font-heading text-4xl md:text-7xl font-black text-white">Studio Services</h2>
+            <p className="text-white/40 mt-4 text-lg md:text-xl">Professional set solutions tailored for impact.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Featured Bento Card */}
             <div className={`md:col-span-2 bg-primary border border-white/5 rounded-[2rem] p-12 hover:border-secondary/40 transition-all duration-500 group flex flex-col justify-between min-h-[400px] ${featVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
@@ -249,7 +241,7 @@ export default function Page() {
                 <Palette size={32} />
               </div>
               <div>
-                <h3 className="font-heading text-4xl font-black text-white mt-10">Set Decoration</h3>
+                <h3 className="font-heading text-2xl md:text-4xl font-black text-white mt-10">Set Decoration</h3>
                 <p className="text-white/50 text-lg mt-4 max-w-md">Creative design for brands looking to build an immersive world around their products. We handle the aesthetics so you can focus on the vision.</p>
               </div>
             </div>
@@ -288,16 +280,16 @@ export default function Page() {
       <section id="about" ref={aboutRef} className="py-28 px-6 bg-primary">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
           <div className={`w-full md:w-1/2 transition-all duration-1000 ${aboutVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'}`}>
-            <h2 className="font-heading text-5xl md:text-7xl font-black text-white leading-[0.9] mb-10">
+            <h2 className="font-heading text-4xl sm:text-5xl md:text-7xl font-black text-white leading-[0.9] mb-8 md:mb-10">
               The Editorial Standard
             </h2>
-            <p className="text-white/50 text-xl leading-relaxed mb-12">
-              Located in the heart of Okota Road, Home of Effects is where artistry meets commercial strategy. We believe that every business owner deserves to stand out, and our mission is to provide the props, decor, and set direction that make it happen. 
+            <p className="text-white/50 text-lg md:text-xl leading-relaxed mb-10 md:mb-12">
+              Located in the heart of Okota Road, Home of Effects is where artistry meets commercial strategy. We believe that every business owner deserves to stand out, and our mission is to provide the props, decor, and set direction that make it happen.
             </p>
             <p className="text-secondary font-bold text-sm uppercase tracking-widest flex items-center gap-4 mb-12">
               <span className="w-12 h-px bg-secondary" /> Lagos-based craftsmanship
             </p>
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
               {stats.map((s, i) => (
                 <div key={i} className={`transition-all duration-1000 ${aboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${i * 150}ms` }}>
                   <p className="font-heading text-4xl font-black text-white">{s.number}</p>
@@ -307,10 +299,10 @@ export default function Page() {
             </div>
           </div>
           <div className={`w-full md:w-1/2 relative aspect-square rounded-[3rem] overflow-hidden transition-all duration-1000 delay-300 ${aboutVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`}>
-            <SafeImage 
-              src="https://images.unsplash.com/photo-1581495009654-777d243766e8" 
-              alt="Studio Workspace" 
-              fill 
+            <SafeImage
+              src="https://images.unsplash.com/photo-1581495009654-777d243766e8"
+              alt="Studio Workspace"
+              fill
               className="object-cover"
             />
             <div className="absolute inset-0 bg-secondary/10 mix-blend-overlay" />
@@ -322,17 +314,17 @@ export default function Page() {
       <section ref={processRef} className="py-28 px-6 bg-secondary/10 border-y border-white/5">
         <div className="max-w-4xl mx-auto">
           <div className="mb-20">
-            <h2 className="font-heading text-5xl font-black text-white">How We Build Your World</h2>
-            <p className="text-white/40 text-lg mt-2">Our linear approach to set perfection.</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-black text-white">How We Build Your World</h2>
+            <p className="text-white/40 text-base md:text-lg mt-2">Our linear approach to set perfection.</p>
           </div>
           <div className="space-y-12">
             {steps.map((step, i) => (
               <div key={i} className={`flex gap-10 items-start group transition-all duration-1000 ${processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${i * 200}ms` }}>
-                <div className="font-heading text-7xl font-black text-secondary/20 group-hover:text-secondary/50 transition-colors shrink-0 leading-none">
+                <div className="font-heading text-5xl md:text-7xl font-black text-secondary/20 group-hover:text-secondary/50 transition-colors shrink-0 leading-none">
                   {step.number}
                 </div>
                 <div className="pt-2 border-l border-white/10 pl-10">
-                  <h3 className="font-heading text-2xl font-bold text-white group-hover:text-secondary transition-colors">{step.title}</h3>
+                  <h3 className="font-heading text-xl md:text-2xl font-bold text-white group-hover:text-secondary transition-colors">{step.title}</h3>
                   <p className="text-white/50 mt-3 text-lg leading-relaxed">{step.description}</p>
                 </div>
               </div>
@@ -357,11 +349,12 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {products.map((p, i) => (
               <div key={i} className={`group relative h-[500px] rounded-[2.5rem] overflow-hidden transition-all duration-700 ${prodVisible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`} style={{ transitionDelay: `${i * 150}ms` }}>
-                <SafeImage 
-                  src={p.image_url} 
-                  alt={p.name} 
-                  fill 
-                  className="object-cover group-hover:scale-110 transition-all duration-[1.5s]" 
+                <SafeImage
+                  src={p.image_url}
+                  alt={p.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-all duration-[1.5s]"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
@@ -377,7 +370,7 @@ export default function Page() {
               </div>
             ))}
           </div>
-          
+
           <div className="mt-16 text-center">
             <p className="text-white/30 text-sm italic italic-none">Sharp set delivery, Lagos-wide.</p>
           </div>
@@ -389,7 +382,7 @@ export default function Page() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="bg-primary/50 p-10 rounded-[3rem] border border-white/5">
-              <h2 className="font-heading text-5xl font-black text-white mb-6">Visit the Showroom</h2>
+              <h2 className="font-heading text-2xl md:text-5xl font-black text-white mb-6">Visit the Showroom</h2>
               <div className="space-y-8">
                 <div className="flex gap-4">
                   <MapPin className="text-secondary shrink-0" />
@@ -406,9 +399,9 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              <a 
-                href="https://maps.google.com/?q=Okota+Road+Lagos" 
-                target="_blank" 
+              <a
+                href="https://maps.google.com/?q=Okota+Road+Lagos"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="mt-10 inline-flex items-center gap-2 bg-white/5 text-white px-8 py-4 rounded-2xl font-bold hover:bg-secondary hover:text-primary transition-all"
               >
@@ -416,10 +409,10 @@ export default function Page() {
               </a>
             </div>
             <div className="h-[450px] bg-zinc-900 rounded-[3rem] overflow-hidden relative shadow-2xl">
-              <SafeImage 
-                src="https://images.unsplash.com/photo-1682542686319-393272073c6d" 
-                alt="Showroom Location" 
-                fill 
+              <SafeImage
+                src="https://images.unsplash.com/photo-1682542686319-393272073c6d"
+                alt="Showroom Location"
+                fill
                 className="object-cover grayscale hover:grayscale-0 transition-all duration-700 opacity-60"
               />
               <div className="absolute inset-0 bg-secondary/10" />
@@ -436,12 +429,12 @@ export default function Page() {
       {/* Contact Section: C3 Minimal Centered */}
       <section id="contact" ref={contactRef} className="py-32 px-6 bg-primary relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-[radial-gradient(circle_at_center,rgba(191,148,255,0.05)_0%,transparent_70%)] pointer-events-none" />
-        
+
         <div className="max-w-2xl mx-auto text-center relative z-10">
           <div className={`transition-all duration-1000 ${contactVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-            <h2 className="font-heading text-6xl font-black text-white mb-6">Get the Look</h2>
-            <p className="text-white/40 mb-16 text-xl">Let&apos;s discuss your next production or showroom visit.</p>
-            
+            <h2 className="font-heading text-4xl md:text-6xl font-black text-white mb-6">Connect</h2>
+            <p className="text-white/40 mb-10 md:mb-16 text-lg md:text-xl">Start your next production here.</p>
+
             {sent ? (
               <div className="flex flex-col items-center justify-center p-16 text-center animate-scaleIn bg-zinc-900/50 rounded-[3rem] border border-secondary/20 shadow-2xl relative overflow-hidden">
                 <div className="w-24 h-24 rounded-full bg-secondary/20 flex items-center justify-center mb-8 border border-secondary/40">
@@ -452,7 +445,7 @@ export default function Page() {
                 <button onClick={() => setSent(false)} className="mt-8 text-secondary font-bold hover:underline">Send another message</button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5 text-left bg-zinc-900/40 p-10 md:p-12 rounded-[3rem] border border-white/5 backdrop-blur-sm">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5 text-left bg-zinc-900/40 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] border border-white/5 backdrop-blur-sm">
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 ml-4">Full Name</label>
@@ -478,8 +471,8 @@ export default function Page() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 ml-4">Message</label>
-                  <textarea 
-                    rows={5} 
+                  <textarea
+                    rows={5}
                     placeholder="Describe your vision or inquiry..."
                     value={form.message}
                     onChange={e => setForm(prev => ({ ...prev, message: e.target.value }))}
@@ -487,8 +480,8 @@ export default function Page() {
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-white/20 outline-none resize-none focus:border-secondary transition-all"
                   />
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={loading}
                   className="w-full bg-secondary text-primary py-5 rounded-2xl font-black text-lg hover:brightness-110 transition-all disabled:opacity-50 flex justify-center items-center gap-3 shadow-[0_10px_40px_rgba(191,148,255,0.2)]"
                 >
@@ -522,7 +515,7 @@ export default function Page() {
               </a>
             </div>
           </div>
-          
+
           <div>
             <h4 className="font-heading font-bold text-white mb-8 uppercase tracking-widest text-xs">Explore</h4>
             <ul className="space-y-4">
